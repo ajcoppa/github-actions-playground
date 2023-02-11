@@ -1,0 +1,27 @@
+name: "Sync testing branch"
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+concurrency: merge_main
+
+jobs:
+  merge-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # See https://github.com/everlytic/branch-merge
+      # GitHub recommends pinning the SHA to avoid actions stealing secrets:
+      # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-third-party-actions
+      - name: Copy Bundled-main to testing
+        uses: everlytic/branch-merge@c4a244dc23143f824ae6c022a10732566cb8e973
+        id: branch-merge
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_ref: "main"
+          target_branch: "testing"
+          commit_message_template: "[Automated] Merged {source_ref} into {target_branch}"

@@ -2,7 +2,7 @@ name: Sync bundled-main-to-testing
 
 on:
   workflow_run:
-    workflows: [Sync branch]
+    workflows: [Sync main to Bundled-main]
     types: [completed]
 permissions:
   contents: write
